@@ -4,6 +4,8 @@
 #include "../include/Shader.h"
 #include "../include/Texture.h"
 
+#include <glm/gtc/type_ptr.hpp>
+
 #include <string>
 #include <map>
 

@@ -9,7 +9,7 @@
 
 // Instantiate static variables
 std::map<std::string, Texture> ResourceManager::Textures;
-std::map<std::string, Shader>    ResourceManager::Shaders;
+std::map<std::string, Shader>  ResourceManager::Shaders;
 
 // Loads (and generates) a shader program from file loading vertex, fragment (and geometry) shader's source code. If gShaderFile is not NULL, it also loads a geometry shader
 Shader ResourceManager::loadShader(const GLchar* vertexShaderFile, const GLchar* fragmentShaderFile, const GLchar* geometryShaderFile, const std::string& name)

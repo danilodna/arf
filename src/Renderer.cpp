@@ -3,6 +3,7 @@
 #include "../include/Texture.h"
 
 #include <iostream>
+#include <memory>
 
 Renderer::Renderer(Shader& shader)
 {
@@ -41,6 +42,7 @@ void Renderer::draw(Texture& texture, glm::vec2 currentPos, glm::vec2 size, GLfl
 	glBindVertexArray(0);
 }
 
+
 void Renderer::initRenderData()
 {
 	// Configure VAO/VBO
@@ -56,11 +58,11 @@ void Renderer::initRenderData()
 
 	GLfloat vertices[] =
 	{
-		// Pos
-		-0.5f,  0.5f,
-		 0.5f,  0.5f,
-		 0.5f, -0.5f,
-		-0.5f, -0.5f,
+		// Pos		  		// TexCoords
+		-0.5f,  0.5f, 		1.0f, 1.0f,
+		 0.5f,  0.5f, 		1.0f, 0.0f,
+		 0.5f, -0.5f, 		0.0f, 0.0f,
+		-0.5f, -0.5f, 		0.0f, 1.0f
 	};
 
 	glGenVertexArrays(1, &m_VAO);
@@ -71,8 +73,59 @@ void Renderer::initRenderData()
 
 	glBindVertexArray(m_VAO);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid*)0);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);	//	Unbind VBO
-	glBindVertexArray(0);							//	Unbind VAO
+	glBindVertexArray(0);				//	Unbind VAO
+}
+
+void Renderer::someFunc()
+{
+	m_handle["basic vao"] = std::make_unique<GLuint>(1);
+	GLuint VBO[2];
+
+	glGenVertexArrays(1, &*m_handle["basic vao"]);
+	glGenBuffers(2, VBO);
+
+	GLfloat quad[] =
+	{
+		// Pos		  		// TexCoords
+		-1.0f,  1.0f, 		1.0f, 1.0f,
+		 0.0f,  1.0f, 		1.0f, 0.0f,
+		 0.0f,  0.0f, 		0.0f, 0.0f,
+		-1.0f,  0.0f, 		0.0f, 1.0f
+	};
+
+	GLfloat triangle[] =
+	{
+		// Pos		  		// TexCoords
+		 0.5f,  0.0f, 		1.0f, 1.0f,
+		 1.0f, -1.0f, 		1.0f, 0.0f,
+		 0.0f, -1.0f, 		0.0f, 0.0f,
+	};
+
+	glBindVertexArray(*m_handle["basic vao"]);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(quad), quad, GL_STATIC_DRAW);
+	
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(triangle), triangle, GL_STATIC_DRAW);
+
+	// glBindVertexArray(*m_handle["basic vao"]);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+
+	glBindVertexArray(*m_handle["basic vao"]);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+	// glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
+	// glDrawArrays(GL_TRIANGLE_FAN, 0, 3);
+
+	glBindVertexArray(0);
 }

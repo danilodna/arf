@@ -2,7 +2,6 @@
 #define TEXTURE_H_
 
 #include "../dependencies/glad/glad.h"
-#include <glm/gtc/type_ptr.hpp>
 
 class Texture
 {

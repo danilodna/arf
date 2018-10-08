@@ -34,6 +34,8 @@ int main(int argc, char** argv)
 
 	Texture tex;
 
+	// Texture tex = ResourceManager::loadTexture("texture");
+
 	GLfloat x = 0, y = 0;
 	while (mainWindow.isOpen())
 	{

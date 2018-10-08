@@ -1,27 +1,29 @@
-#include "../include/Window.h"
 #include <iostream>
+#include "../include/Window.h"
 
 Window::Window()
 {
-
 }
 
-Window::Window(const GLuint width, const GLuint height, const std::string& title)
+Window::Window(const GLuint width, const GLuint height, const std::string &title)
 {
 	m_width = width;
 	m_height = height;
 	m_title = title;
 
-	if(!init())
+	glfwSetErrorCallback(static_cast<GLFWerrorfun>(InputHandler::error_callback));
+
+	if (!initGLFWParams())
 		std::cerr << "[ERROR]: Could not initialize Window." << '\n';
+
+	
 }
 
 Window::~Window()
 {
-
 }
 
-bool Window::init()
+bool Window::initGLFWParams()
 {
 	/* Initialize the library */
 	if (!glfwInit())
@@ -49,22 +51,30 @@ bool Window::init()
 	glfwMakeContextCurrent(m_window);
 
 	// Loading glad
-	if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
 		std::cerr << "[ERROR]: Failed to initialize GlAD." << std::endl;
 		return false;
 	}
 
 	// OpenGL configuration
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-	// glViewport(0, 0, m_width, m_height);
+	// glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glViewport(0, 0, m_width, m_height);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	// glEnable(GL_BLEND);
+	// glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	// This function defines the callback which will be called everytime that the window is resized,
+	glfwSetFramebufferSizeCallback(m_window, InputHandler::framebuffer_size_callback);
+
+	// These functions defines the callback for these forms of input.
+	glfwSetKeyCallback(m_window, InputHandler::key_callback);
+	glfwSetMouseButtonCallback(m_window, InputHandler::mouse_button_callback);
+	glfwSetCursorPosCallback(m_window, InputHandler::cursor_pos_callback);
+	glfwSetScrollCallback(m_window, InputHandler::scroll_callback);
+
 
 	return true;
 }
-
 
 bool Window::isOpen()
 {
@@ -74,6 +84,7 @@ bool Window::isOpen()
 void Window::clear()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 void Window::update()
@@ -83,4 +94,10 @@ void Window::update()
 
 	/* Poll for and process events */
 	glfwPollEvents();
+}
+
+void Window::cleanAndDestroyWindow()
+{
+	glfwDestroyWindow(m_window);
+	glfwTerminate();
 }

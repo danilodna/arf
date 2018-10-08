@@ -1,18 +1,21 @@
 #ifndef WINDOW_H_
 #define WINDOW_H_
 
-#include "../dependencies/glad/glad.h"
-#include <GLFW/glfw3.h>
+// #include "../dependencies/glad/glad.h"
+// #include <GLFW/glfw3.h>
+#include "InputHandler.h"
 #include <string>
 
 class Window
 {
 private:
+	std::string m_title;
 	GLFWwindow* m_window;
 	GLuint m_width, m_height;
-	std::string m_title;
 
-	bool init();
+	bool initGLFWParams();
+	// void oGLInitialConfig();
+	// void setCallbackFunctions();
 
 public:
 	Window ();
@@ -26,7 +29,8 @@ public:
 	bool isOpen();
 	void update();
 	void clear();
-
+	void cleanAndDestroyWindow();
+	bool createWindow();
 };
 
 #endif // WINDOW_H_

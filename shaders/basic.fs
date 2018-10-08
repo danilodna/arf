@@ -5,7 +5,10 @@ in vec4 color;
 
 in vec2 aTexCoord;
 
+uniform sampler2D ourTexture;
+
 void main()
 {
 	FragColor = color;
+	// FragColor = texture(ourTexture, aTexCoord);
 }
