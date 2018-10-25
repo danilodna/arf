@@ -1,9 +1,8 @@
 #ifndef WINDOW_H_
 #define WINDOW_H_
 
-// #include "../dependencies/glad/glad.h"
-// #include <GLFW/glfw3.h>
 #include "InputHandler.h"
+#include "Common.hpp"
 #include <string>
 
 class Window
@@ -31,6 +30,8 @@ public:
 	void clear();
 	void cleanAndDestroyWindow();
 	bool createWindow();
+
+	glm::mat4 getProjection();
 };
 
 #endif // WINDOW_H_

@@ -1,4 +1,5 @@
 #include "../include/ResourceManager.h"
+#include "../include/Window.h"
 
 // 	Library to load textures
 #include "../dependencies/stb/stb_image.h"
@@ -9,30 +10,36 @@
 
 // Instantiate static variables
 std::map<std::string, Texture> ResourceManager::Textures;
-std::map<std::string, Shader>  ResourceManager::Shaders;
+std::map<std::string, Shader> ResourceManager::Shaders;
 
 // Loads (and generates) a shader program from file loading vertex, fragment (and geometry) shader's source code. If gShaderFile is not NULL, it also loads a geometry shader
-Shader ResourceManager::loadShader(const GLchar* vertexShaderFile, const GLchar* fragmentShaderFile, const GLchar* geometryShaderFile, const std::string& name)
+Shader ResourceManager::loadShader(const GLchar *vertexShaderFile, const GLchar *fragmentShaderFile, const GLchar *geometryShaderFile,
+								   const std::string &name, GLfloat width, GLfloat height)
 {
 	Shaders[name] = loadShaderFromFile(vertexShaderFile, fragmentShaderFile, geometryShaderFile);
+
+	// Hiding here matrix projection from user
+	glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(800), 0.0f, static_cast<GLfloat>(600), -1.0f, 1.0f);
+	Shaders[name].use().setMatrix4("projection", projection);
+
 	return Shaders[name];
 }
 
 // Retrieves a stored sader
-Shader ResourceManager::getShader(const std::string& name)
+Shader ResourceManager::getShader(const std::string &name)
 {
 	return Shaders[name];
 }
 
 // Loads (and generates) a texture from file
-Texture ResourceManager::loadTexture(const GLchar *file, GLboolean alpha, const std::string& name)
+Texture ResourceManager::loadTexture(const GLchar *file, GLboolean alpha, const std::string &name)
 {
 	Textures[name] = loadTextureFromFile(file, alpha);
 	return Textures[name];
 }
 
 // Retrieves a stored texture
-Texture ResourceManager::getTexture(const std::string& name)
+Texture ResourceManager::getTexture(const std::string &name)
 {
 	return Textures[name];
 }
@@ -73,7 +80,6 @@ Shader ResourceManager::loadShaderFromFile(const GLchar *vShaderFile, const GLch
 		vertexCode = vShaderStream.str();
 		fragmentCode = fShaderStream.str();
 
-
 		// If geometry shader path is present, also load a geometry shader
 		if (gShaderFile != NULL)
 		{
@@ -93,7 +99,6 @@ Shader ResourceManager::loadShaderFromFile(const GLchar *vShaderFile, const GLch
 	const GLchar *fShaderCode = fragmentCode.c_str();
 	const GLchar *gShaderCode = geometryCode.c_str();
 
-
 	// 2. Now create shader object from source code
 	Shader shader;
 	shader.compile(vShaderCode, fShaderCode, gShaderFile != NULL ? gShaderCode : NULL);
@@ -111,9 +116,12 @@ Texture ResourceManager::loadTextureFromFile(const GLchar *file, GLboolean alpha
 		texture.Image_Format = GL_RGBA;
 	}
 
+	// Flip texture because OpenGL (0, 0) is left bottom and
+	// And the standart (0, 0) is top right
+	stbi_set_flip_vertically_on_load(1);
 	// Load image
 	int width, height, nrChannelsText;
-	unsigned char* image = stbi_load(file, &width, &height, &nrChannelsText, 0);
+	unsigned char *image = stbi_load(file, &width, &height, &nrChannelsText, 0);
 
 	GLuint wid = width;
 	GLuint hei = height;

@@ -2,6 +2,7 @@
 #define RENDERER_H_
 
 #include "Common.hpp"
+#include "Object.h"
 
 #include "Texture.h"
 #include "Shader.h"
@@ -12,21 +13,13 @@
 
 class Renderer
 {
-private:
-	std::map<std::string, std::unique_ptr<GLuint> > m_handle;
+  private:
+	Renderer() = default;
 
-	Shader m_shader;
-	GLuint m_VAO;
-	// Initializes and configures the quad's buffer and vertex attributes
-	void initRenderData();
-
-public:
-	Renderer(Shader& shader);
-	virtual ~Renderer();
-
-	void draw(Texture& texture, glm::vec2 currentPos, glm::vec2 size = glm::vec2(10, 10), GLfloat rotate = 0.0f, glm::vec3 color = glm::vec3(0.0f));
-
-	void someFunc();
+  public:
+	static void buildMesh(Mesh& mesh);
+	static void draw(Object& obj, const Mesh& mesh, GLenum mode = GL_TRIANGLE_FAN);
+	static void draw(Object& obj, const Mesh& mesh, Texture texture, GLenum mode = GL_TRIANGLE_FAN);
 };
 
 #endif // RENDERER_H_

@@ -15,13 +15,13 @@ TARGET = $(EXECDIR)$(EXEC)
 # Change here the compilation unit with the main function 
 MAIN = AppTeste
 
-SRC  = $(addprefix $(SRCDIR), $(MAIN).cpp Renderer.cpp ResourceManager.cpp Camera.cpp \
-		 Window.cpp Collision.cpp InputHandler.cpp Texture.cpp Shader.cpp) 
+SRC  = $(addprefix $(SRCDIR), $(MAIN).cpp Renderer.cpp ResourceManager.cpp \
+		 Window.cpp DetectCollision.cpp InputHandler.cpp Texture.cpp Shader.cpp Object.cpp) 
 TEST = $(addsufix .cpp, $(addprefix $(TESTDIR), TestMenu TestClearColor))
-INC  = $(addprefix $(INCDIR), Renderer.h ResourceManager.h Camera.h Window.h Collision.h \
-		InputHandler.h Texture.h Shader.h Mesh.hpp Vertex.hpp)
-OBJ  = $(addprefix $(OBJDIR), $(MAIN).o Renderer.o ResourceManager.o Camera.o \
-		Window.o Collision.o InputHandler.o Texture.o Shader.o \
+INC  = $(addprefix $(INCDIR), Renderer.h ResourceManager.h  Window.h DetectCollision.hpp \
+		InputHandler.h Texture.h Shader.h Mesh.hpp Vertex.hpp Object.h)
+OBJ  = $(addprefix $(OBJDIR), $(MAIN).o Renderer.o ResourceManager.o  \
+		Window.o DetectCollision.o InputHandler.o Texture.o Shader.o Object.o\
 		TestMenu.o TestClearColor.o)
 LIBS = -lglfw3 -lrt -lm -ldl -lXrandr -lXinerama -lXi -lXcursor -lXrender -lGL -lm -ldl -ldrm \
 			-lXdamage -lXfixes -lX11-xcb -lxcb-glx -lxcb-dri2 -lXxf86vm -lXext -lX11 -lxcb -lXau -lXdmcp
@@ -44,19 +44,19 @@ $(OBJDIR)TestMenu.o: $(TESTDIR)TestMenu.cpp $(TESTDIR)Test.hpp
 $(OBJDIR)TestClearColor.o: $(TESTDIR)TestClearColor.cpp $(TESTDIR)TestClearColor.hpp
 	$(CXX) -c $< -o $@ $(CFLAGS)
 
+$(OBJDIR)Object.o: $(SRCDIR)Object.cpp $(INCDIR)Object.h
+	$(CXX) -c $< -o $@ $(CFLAGS)
+
 $(OBJDIR)Renderer.o: $(SRCDIR)Renderer.cpp $(INCDIR)Renderer.h
 	$(CXX) -c $< -o $@ $(CFLAGS)
 
 $(OBJDIR)ResourceManager.o: $(SRCDIR)ResourceManager.cpp $(INCDIR)ResourceManager.h
 	$(CXX) -c $< -o $@ $(CFLAGS)
 
-$(OBJDIR)Camera.o: $(SRCDIR)Camera.cpp $(INCDIR)Camera.h
-	$(CXX) -c $< -o $@ $(CFLAGS)
-
 $(OBJDIR)Window.o: $(SRCDIR)Window.cpp $(INCDIR)Window.h
 	$(CXX) -c $< -o $@ $(CFLAGS)
 
-$(OBJDIR)Collision.o: $(SRCDIR)Collision.cpp $(INCDIR)Collision.h
+$(OBJDIR)DetectCollision.o: $(SRCDIR)DetectCollision.cpp $(INCDIR)DetectCollision.hpp
 	$(CXX) -c $< -o $@ $(CFLAGS)
 
 $(OBJDIR)InputHandler.o: $(SRCDIR)InputHandler.cpp $(INCDIR)InputHandler.h
@@ -72,7 +72,7 @@ $(OBJDIR)Shader.o: $(SRCDIR)Shader.cpp $(INCDIR)Shader.h
 
 .PHONY: clean run
 clean:
-	rm -rf $(EXEC) $(OBJDIR)*
+	rm -rf $(EXECDIR)$(EXEC) $(OBJDIR)*
 
 run:
 	./$(TARGET)

@@ -60,8 +60,8 @@ bool Window::initGLFWParams()
 	// OpenGL configuration
 	// glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glViewport(0, 0, m_width, m_height);
-	// glEnable(GL_BLEND);
-	// glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// This function defines the callback which will be called everytime that the window is resized,
 	glfwSetFramebufferSizeCallback(m_window, InputHandler::framebuffer_size_callback);
@@ -71,7 +71,6 @@ bool Window::initGLFWParams()
 	glfwSetMouseButtonCallback(m_window, InputHandler::mouse_button_callback);
 	glfwSetCursorPosCallback(m_window, InputHandler::cursor_pos_callback);
 	glfwSetScrollCallback(m_window, InputHandler::scroll_callback);
-
 
 	return true;
 }
@@ -84,7 +83,7 @@ bool Window::isOpen()
 void Window::clear()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 }
 
 void Window::update()

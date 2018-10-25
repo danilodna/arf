@@ -2,8 +2,9 @@
 #define SHADER_H_
 #include <string>
 
-#include "../dependencies/glad/glad.h"
-#include <glm/gtc/type_ptr.hpp>
+// #include "../dependencies/glad/glad.h"
+// #include <glm/gtc/type_ptr.hpp>
+#include "Common.hpp"
 
 class Shader
 {

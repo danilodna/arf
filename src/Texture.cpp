@@ -30,8 +30,9 @@ void Texture::generate(GLuint width, GLuint height, unsigned char* data)
 	glBindTexture(GL_TEXTURE_2D, 0);	// Unbind texture
 }
 
-void Texture::bind() const
+void Texture::bind(const GLuint slot) const
 {
+	glActiveTexture(GL_TEXTURE0 + slot);
 	glBindTexture(GL_TEXTURE_2D, m_id);
 }
 

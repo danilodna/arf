@@ -1,5 +1,6 @@
 #version 330 core
 layout (location = 0) in vec4 vertex;
+layout (location = 1) in vec4 texCoords;
 
 out vec2 aTexCoord;
 out vec4 color;
@@ -15,8 +16,10 @@ uniform vec3 objectColor;
 
 void main()
 {
-	aTexCoord = (-vertex.xy);
+	// aTexCoord = (-vertex.xy);
 	// gl_Position = projection * model * vec4(vertex.xy, 0.0f, 1.0f);
-	gl_Position = vec4(vertex.xy, 0.0f, 1.0f);
+	// gl_Position = vec4(vertex.xy, 0.0f, 1.0f);
+	gl_Position = projection * model * vertex;
 	color = vec4(vec3(0.0f, 1.0f, 0.0f), 1.0f);
+	aTexCoord = texCoords.xy;
 }

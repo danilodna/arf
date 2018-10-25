@@ -25,7 +25,8 @@ public:
 	static std::map<std::string, Texture> Textures;
 
 	// Loads (and generates) a shader program from file loading vertex, fragment (and geometry) shader's source code. If gShaderFile is not NULL, it also loads a geometry shader
-	static Shader loadShader(const GLchar* vertexShaderFile, const GLchar* fragmentShaderFile, const GLchar* geometryShaderFile, const std::string& name);
+	static Shader loadShader(const GLchar* vertexShaderFile, const GLchar* fragmentShaderFile, const GLchar* geometryShaderFile, const std::string& name, GLfloat width, GLfloat height);
+	// static Shader loadShader(const GLchar* vertexShaderFile, const GLchar* fragmentShaderFile, const GLchar* geometryShaderFile, const std::string& name);
 	// Retrieves a stored sader
 	static Shader getShader(const std::string& name);
 	// Loads (and generates) a texture from file
