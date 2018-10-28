@@ -38,7 +38,6 @@ void InputHandler::key_callback(GLFWwindow* window, int key, int scancode, int a
 
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
     {
-        std::cout << "dafuq" << std::endl;
         glfwSetWindowShouldClose(window, GLFW_TRUE);
     }
 
@@ -66,8 +65,8 @@ void InputHandler::mouse_button_callback(GLFWwindow* window, int button, int act
 // Relative to the top-left corner of the window client area
 void InputHandler::cursor_pos_callback(GLFWwindow* window, double xpos, double ypos)
 {
-    cursorPos.first = xpos;
-    cursorPos.second = 600 - ypos;
+    cursorPos.first = 640 - xpos;
+    cursorPos.second = ypos;
 }
 
 void InputHandler::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)

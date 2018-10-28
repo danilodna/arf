@@ -72,6 +72,9 @@ bool Window::initGLFWParams()
 	glfwSetCursorPosCallback(m_window, InputHandler::cursor_pos_callback);
 	glfwSetScrollCallback(m_window, InputHandler::scroll_callback);
 
+	// ImGui setup configuration
+	configImGui();
+
 	return true;
 }
 
@@ -82,6 +85,9 @@ bool Window::isOpen()
 
 void Window::clear()
 {
+	/* Poll for and process events */
+	glfwPollEvents();
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 }
@@ -90,13 +96,21 @@ void Window::update()
 {
 	/* Swap front and back buffers */
 	glfwSwapBuffers(m_window);
-
-	/* Poll for and process events */
-	glfwPollEvents();
 }
 
 void Window::cleanAndDestroyWindow()
 {
-	glfwDestroyWindow(m_window);
+	ImGui::DestroyContext();
 	glfwTerminate();
+}
+
+void Window::configImGui()
+{
+	// Setup Dear ImGui binding
+    ImGui::CreateContext();
+	ImGui_ImplGlfwGL3_Init(m_window, true);
+	ImGui::StyleColorsDark();
+
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
 }

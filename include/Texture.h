@@ -2,6 +2,7 @@
 #define TEXTURE_H_
 
 #include "Common.hpp"
+#include <OpenNI.h>
 
 class Texture
 {
@@ -26,10 +27,11 @@ public:
 	GLuint Filter_Max; // Filtering mode if texture pixels > screen pixels
 
 	// Generates texture from image data
-	void generate(GLuint width, GLuint height, unsigned char* data);
+	void generate(GLuint width, GLuint height, unsigned char* data = nullptr);
 	void bind(const GLuint slot = 0) const;
 	void unbind() const;
 	void update(unsigned char* data) const;
+	void update(OniRGB888Pixel* data) const;
 
 };
 

@@ -44,6 +44,13 @@ void Texture::unbind() const
 void Texture::update(unsigned char* data) const
 {
   glBindTexture(GL_TEXTURE_2D, m_id);
-	glTexImage2D(GL_TEXTURE_2D, 0, this->Internal_Format, m_texWidth, m_texHeight, 0, this->Image_Format, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, this->Internal_Format, m_texWidth, m_texHeight, 0, this->Image_Format, GL_UNSIGNED_BYTE, data);
+  glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void Texture::update(OniRGB888Pixel* data) const
+{
+  glBindTexture(GL_TEXTURE_2D, m_id);
+		glTexImage2D(GL_TEXTURE_2D, 0, this->Internal_Format, m_texWidth, m_texHeight, 0, this->Image_Format, GL_UNSIGNED_BYTE, data);
   glBindTexture(GL_TEXTURE_2D, 0);
 }

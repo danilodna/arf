@@ -19,7 +19,7 @@ Shader ResourceManager::loadShader(const GLchar *vertexShaderFile, const GLchar 
 	Shaders[name] = loadShaderFromFile(vertexShaderFile, fragmentShaderFile, geometryShaderFile);
 
 	// Hiding here matrix projection from user
-	glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(800), 0.0f, static_cast<GLfloat>(600), -1.0f, 1.0f);
+	glm::mat4 projection = glm::ortho<float>(width, 0, height, 0, -1.0f, 1.0f);
 	Shaders[name].use().setMatrix4("projection", projection);
 
 	return Shaders[name];
@@ -118,7 +118,7 @@ Texture ResourceManager::loadTextureFromFile(const GLchar *file, GLboolean alpha
 
 	// Flip texture because OpenGL (0, 0) is left bottom and
 	// And the standart (0, 0) is top right
-	stbi_set_flip_vertically_on_load(1);
+	// stbi_set_flip_vertically_on_load(1);
 	// Load image
 	int width, height, nrChannelsText;
 	unsigned char *image = stbi_load(file, &width, &height, &nrChannelsText, 0);

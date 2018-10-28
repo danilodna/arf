@@ -30,6 +30,7 @@ public:
 	void clear();
 	void cleanAndDestroyWindow();
 	bool createWindow();
+	void configImGui();
 
 	glm::mat4 getProjection();
 };

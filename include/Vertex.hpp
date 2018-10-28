@@ -17,6 +17,8 @@ private:
 
 public:
   Vertex() = default;
+  Vertex(const glm::vec2 &pos) : m_position(pos, 0.0f, 1.0f){};
+  Vertex(const glm::vec3 &pos) : m_position(pos, 1.0f){};
   Vertex(const glm::vec4 &pos) : m_position(pos){};
   Vertex(const glm::vec4 &pos, const glm::vec4 &color)
       : m_position(pos), m_color(color){};

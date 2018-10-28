@@ -12,7 +12,7 @@ class Object
 	GLfloat		m_rotation;
 
   public:
-	Object() : m_currentPos(glm::vec2(0.5f, 0.5f)), m_size(glm::vec2(1.0f, 1.0f)), m_rotation(0) { };
+	Object() : m_currentPos(glm::vec2(0.0f, 0.0f)), m_size(glm::vec2(1.0f, 1.0f)), m_rotation(0) { };
 	virtual ~Object() = default;
 
 	//	Getters

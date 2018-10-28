@@ -5,6 +5,10 @@
 #include "ResourceManager.h"
 #include "Common.hpp"
 
+#include "../include/Vertex.hpp"
+#include "../include/Skeleton.h"
+#include <vector>
+
 // OpenNI2 and NiTE headers
 #include <OpenNI.h>
 #include <NiTE.h>
@@ -21,29 +25,24 @@ private:
 	OniRGB888Pixel* rgbData;
 	bool _toogleSkel;
 
-	// Window Variables
-	const int w_Width;
-	const int	w_Height;
-
 public:
 	nite::UserTracker uTracker;
-	Kinect(const int window_width, const int window_height);
+	Kinect();
 	~Kinect();
 	void toogleSkeleton();
 
 	// inline OniRGB888Pixel* getRGBTex() { return rgbData; }
-	inline Texture getRGBTex() { return rgbTex; }
-	inline OniRGB888Pixel* getRGBData() { return rgbData; }
-	inline bool getToogleSkel() { return _toogleSkel; }
+	inline Texture getRGBTex()			{ return rgbTex;		}
+	inline OniRGB888Pixel* getRGBData()	{ return rgbData;		}
+	inline bool getToogleSkel()			{ return _toogleSkel;	}
 
 	void initOpenNI();
 	void initNITE();
 	void updateRGBCam();
-	std::vector< std::vector<Vertex> > detectSkeleton();
+	std::vector<Skeleton> trackSkeletons();
 	Vertex jointCoords(nite::Skeleton user_skel, nite::JointType joint);
 	void enableImageRegistration();
 	void close();
-
 };
 
 #endif	//	KINECT_H_

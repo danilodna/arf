@@ -6,7 +6,8 @@
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/include",
                 "${workspaceFolder}/Tests",
-                "${workspaceFolder}/include"
+                "/opt/OpenNI-Linux-x64-2.2/Include",
+                "/opt/NiTE-Linux-x64-2.2/Include"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
