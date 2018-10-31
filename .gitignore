@@ -1,3 +1,11 @@
 bin/intermediate
 bin/x64_release
+
 textures
+.vscode
+
+imgui.ini
+.jsbeautifyrc
+
+NiTE2
+NiTE2/*
