@@ -18,7 +18,9 @@ void Renderer::buildMesh(Mesh &mesh)
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
 
 	// "Send" the data to the GPU
-	glBufferData(GL_ARRAY_BUFFER, mesh.getDrawCount() * sizeof(mesh.getVertexList()[0]),
+	// glBufferData(GL_ARRAY_BUFFER, mesh.getDrawCount() * sizeof(mesh.getVertexList()[0]),
+				//  &(mesh.getVertexList()[0]), mesh.getUsage());
+	glBufferData(GL_ARRAY_BUFFER, mesh.getVertexList().size() * sizeof(mesh.getVertexList()[0]),
 				 &(mesh.getVertexList()[0]), mesh.getUsage());
 
 	// Set VAO and VBO
@@ -26,19 +28,60 @@ void Renderer::buildMesh(Mesh &mesh)
 	mesh.setVBO(VBO, 1);
 
 	// Telling to OpenGL how to manipulate the data in GPU
-	for (unsigned int i = 0; i < mesh.getNumAttr(); ++i)
+	// for (unsigned int i = 0; i < mesh.getNumAttr(); ++i)
+	// {
+	// 	// Enable or disable a generic vertex attribute array
+	// 	glEnableVertexAttribArray(i);
+
+	// 	// Define an array of generic vertex attribute data
+	// 	glVertexAttribPointer(i,
+	// 						  mesh.getSizeAttr(),
+	// 						  GL_FLOAT,
+	// 						  GL_FALSE,
+	// 						  mesh.getNumAttr() * mesh.getSizeAttr() * sizeof(GLfloat),
+	// 						  (void *)(i * mesh.getSizeAttr() * sizeof(GLfloat)));
+	// }
+	
+	
+	for (unsigned int i = 0; i < mesh.getLayout().size(); ++i)
 	{
+		auto layout = mesh.getLayout()[i];
+
 		// Enable or disable a generic vertex attribute array
 		glEnableVertexAttribArray(i);
 
+		// Offset to define where that attrib begins in the buffer
+		intptr_t offset = 0;
+
 		// Define an array of generic vertex attribute data
 		glVertexAttribPointer(i,
-							  mesh.getSizeAttr(),
-							  GL_FLOAT,
-							  GL_FALSE,
-							  mesh.getNumAttr() * mesh.getSizeAttr() * sizeof(GLfloat),
-							  (void *)(i * mesh.getSizeAttr() * sizeof(GLfloat)));
+							  layout.m_count,
+							  layout.m_type,
+							  layout.m_normalized,
+							  mesh.getStride(),
+							  (void *)(i * layout.m_count * sizeof(layout.m_type)));
 	}
+
+	// for (unsigned int i = 0; i < mesh.getLayout().size(); ++i)
+	// {
+	// 	const auto& layout = mesh.getLayout()[i];
+
+	// 	// Enable or disable a generic vertex attribute array
+	// 	glEnableVertexAttribArray(i);
+
+	// 	// Offset to define where that attrib begins in the buffer
+	// 	intptr_t offset = 0;
+
+	// 	// Define an array of generic vertex attribute data
+	// 	glVertexAttribPointer(i,
+	// 						  layout.m_count,
+	// 						  layout.m_type,
+	// 						  layout.m_normalized,
+	// 						  mesh.getStride(),
+	// 						  (void *) offset);
+
+	// 	offset += layout.m_count * sizeof(layout.m_type);
+	// }
 
 	glBindVertexArray(0); // ===	Like glEnd() === //
 }

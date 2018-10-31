@@ -8,8 +8,12 @@
 
 struct VertexLayout
 {
-    GLuint m_size;
-    GLuint m_type;
+    GLint m_count;
+    GLenum m_type;
+    GLboolean m_normalized;
+
+    VertexLayout(GLuint count, GLenum type, GLboolean normalized) : 
+    m_count(count), m_type(type), m_normalized(normalized) { }
 };
 
 class Mesh
@@ -23,7 +27,7 @@ class Mesh
 
     // Apropriated shader for this mesh
     Shader &m_shader;
-
+    
     GLuint m_stride;
 
     // Metadata
@@ -45,13 +49,15 @@ class Mesh
   public:
     Mesh() = default;
 
-    // template <typename T>
-    // void push(int count)
-    // {
-    //     static_assert(false);
-    // }
+    template <typename T>
+    void push(GLuint size)
+    {
+        // static_assert(false);
+    }
 
-    Mesh(Vertex *vertices, Shader &shader, GLuint numVertices, GLuint numAttr, GLuint sizeAttr, GLenum usage) : m_shader(shader), m_stride(0)
+    Mesh(Vertex *vertices, Shader &shader, GLuint numVertices, GLuint numAttr,
+         GLuint sizeAttr, GLenum usage = GL_STATIC_DRAW) : 
+         m_shader(shader), m_stride(0)
     {
         m_drawCount = numVertices; // Number of vertex in the polygon
         m_numAttr = numAttr;       // Number of atributes in each vertex (e.g. vec2 == 2, vec3 == 3, vec4 == 4)
@@ -61,7 +67,9 @@ class Mesh
         for (GLuint i = 0; i < numVertices; ++i)
             m_vertex.emplace_back(vertices[i]);
     }
-    Mesh(std::vector<Vertex> vertices, Shader &shader, GLuint numAttr, GLuint sizeAttr, GLenum usage) : m_shader(shader)
+    Mesh(std::vector<Vertex> vertices, Shader &shader, GLuint numAttr,
+         GLuint sizeAttr, GLenum usage = GL_STATIC_DRAW) : 
+         m_shader(shader), m_stride(0)
     {
         m_drawCount = vertices.size();
         m_numAttr = numAttr;
@@ -87,21 +95,24 @@ class Mesh
     void printMesh() const
     {
         GLuint i = 0;
-        for (const auto &v : m_vertex)
+        for (const auto& v : m_vertex)
         {
             std::cout << "Vertex " << i++ << " - ";
             v.print();
         }
     }
 
-    inline Shader getShader() const { return m_shader; }
+    inline Shader   getShader() const   { return m_shader; }
+    inline GLuint   getStride() const   { return m_stride; }
 
-    inline GLuint getNumAttr() const { return m_numAttr; }
+    inline GLuint getNumAttr()  const { return m_numAttr; }
     inline GLuint getSizeAttr() const { return m_sizeAttr; }
     inline GLuint getDrawCount() const { return m_drawCount; }
     inline GLuint getIndicesCount() const { return m_indicesCount; }
     inline GLenum getUsage() const { return m_usage; }
-    inline std::vector<Vertex> getVertexList() const { return m_vertex; }
+
+    inline std::vector<Vertex> getVertexList()      const { return m_vertex; }
+    inline std::vector<VertexLayout> getLayout()    const { return m_layout; }
 
     inline GLuint getVAO() const { return m_VAO; }
 
@@ -110,26 +121,54 @@ class Mesh
     inline void setEBO(GLuint *EBO, GLuint size) { memcpy(m_EBO, EBO, size * sizeof(GLuint)); }
 };
 
-// template <>
-// void Mesh::push<float>(int count)
-// {
-//     m_layout.emplace_back({
-//         GLfloat,
-//         count,
-//     })
-// }
+template <>
+inline void Mesh::push<float>(GLuint count)
+{
+    m_layout.emplace_back(VertexLayout(count, GL_FLOAT, GL_FALSE));
+    m_stride += count * sizeof(GL_FLOAT);
+}
 
-// template <>
-// void Mesh::push<unsigned int>(int count)
-// {
-//     m_layout.emplace_back({})
-// }
+template <>
+inline void Mesh::push<unsigned int>(GLuint count)
+{
+    m_layout.emplace_back(VertexLayout(count, GL_UNSIGNED_INT, GL_FALSE));
+    m_stride += count * sizeof(GL_UNSIGNED_INT);
+}
 
-// template <>
-// void Mesh::push<char>(int count)
-// {
-//     m_layout.emplace_back({})
-// }
+template <>
+inline void Mesh::push<unsigned char>(GLuint count)
+{
+    m_layout.emplace_back(VertexLayout(count, GL_UNSIGNED_BYTE, GL_FALSE));
+    m_stride += count * sizeof(GL_UNSIGNED_BYTE);
+}
+
+template <>
+inline void Mesh::push<glm::vec1>(GLuint count)
+{
+    m_layout.emplace_back(VertexLayout(count, GL_FLOAT, GL_FALSE));
+    m_stride += count * sizeof(GL_FLOAT);
+}
+
+template <>
+inline void Mesh::push<glm::vec2>(GLuint count)
+{
+    m_layout.emplace_back(VertexLayout(count, GL_FLOAT, GL_FALSE));
+    m_stride += count * sizeof(GL_FLOAT);
+}
+
+template <>
+inline void Mesh::push<glm::vec3>(GLuint count)
+{
+    m_layout.emplace_back(VertexLayout(count, GL_FLOAT, GL_FALSE));
+    m_stride += count * sizeof(GL_FLOAT);
+}
+
+template <>
+inline void Mesh::push<glm::vec4>(GLuint count)
+{
+    m_layout.emplace_back(VertexLayout(count, GL_FLOAT, GL_FALSE));
+    m_stride += count * sizeof(GLfloat);
+}
 
 // Mesh::Mesh(Vertex* vertices, GLuint numVertices, GLuint numAttr, GLuint sizeAttr, GLenum usage)
 // {
