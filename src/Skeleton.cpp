@@ -3,55 +3,92 @@
 Skeleton::Skeleton(nite::Skeleton& ID, nite::UserTracker& userTracker) :
     m_ID(ID), m_userTracker(userTracker)    
 {
-    joints[nite::JOINT_HEAD] =              getJointCoords(nite::JOINT_HEAD);
-    joints[nite::JOINT_NECK] =              getJointCoords(nite::JOINT_NECK);
-    joints[nite::JOINT_LEFT_SHOULDER] =     getJointCoords(nite::JOINT_LEFT_SHOULDER);
-    joints[nite::JOINT_RIGHT_SHOULDER] =    getJointCoords(nite::JOINT_RIGHT_SHOULDER);
-    joints[nite::JOINT_LEFT_ELBOW] =        getJointCoords(nite::JOINT_LEFT_ELBOW);
-    joints[nite::JOINT_RIGHT_ELBOW] =       getJointCoords(nite::JOINT_RIGHT_ELBOW);
-    joints[nite::JOINT_LEFT_HAND] =         getJointCoords(nite::JOINT_LEFT_HAND);
-    joints[nite::JOINT_RIGHT_HAND] =        getJointCoords(nite::JOINT_RIGHT_HAND);
-    joints[nite::JOINT_TORSO] =             getJointCoords(nite::JOINT_TORSO);
-    joints[nite::JOINT_LEFT_HIP] =          getJointCoords(nite::JOINT_LEFT_HIP);
-    joints[nite::JOINT_RIGHT_HIP] =         getJointCoords(nite::JOINT_RIGHT_HIP);
-    joints[nite::JOINT_LEFT_KNEE] =         getJointCoords(nite::JOINT_LEFT_KNEE);
-    joints[nite::JOINT_RIGHT_KNEE] =        getJointCoords(nite::JOINT_RIGHT_KNEE);
-    joints[nite::JOINT_LEFT_FOOT] =         getJointCoords(nite::JOINT_LEFT_FOOT);
-    joints[nite::JOINT_RIGHT_FOOT] =        getJointCoords(nite::JOINT_RIGHT_FOOT);
+    m_joints[nite::JOINT_HEAD] =              getJointCoords(nite::JOINT_HEAD);
+    m_joints[nite::JOINT_NECK] =              getJointCoords(nite::JOINT_NECK);
+    m_joints[nite::JOINT_LEFT_SHOULDER] =     getJointCoords(nite::JOINT_LEFT_SHOULDER);
+    m_joints[nite::JOINT_RIGHT_SHOULDER] =    getJointCoords(nite::JOINT_RIGHT_SHOULDER);
+    m_joints[nite::JOINT_LEFT_ELBOW] =        getJointCoords(nite::JOINT_LEFT_ELBOW);
+    m_joints[nite::JOINT_RIGHT_ELBOW] =       getJointCoords(nite::JOINT_RIGHT_ELBOW);
+    m_joints[nite::JOINT_LEFT_HAND] =         getJointCoords(nite::JOINT_LEFT_HAND);
+    m_joints[nite::JOINT_RIGHT_HAND] =        getJointCoords(nite::JOINT_RIGHT_HAND);
+    m_joints[nite::JOINT_TORSO] =             getJointCoords(nite::JOINT_TORSO);
+    m_joints[nite::JOINT_LEFT_HIP] =          getJointCoords(nite::JOINT_LEFT_HIP);
+    m_joints[nite::JOINT_RIGHT_HIP] =         getJointCoords(nite::JOINT_RIGHT_HIP);
+    m_joints[nite::JOINT_LEFT_KNEE] =         getJointCoords(nite::JOINT_LEFT_KNEE);
+    m_joints[nite::JOINT_RIGHT_KNEE] =        getJointCoords(nite::JOINT_RIGHT_KNEE);
+    m_joints[nite::JOINT_LEFT_FOOT] =         getJointCoords(nite::JOINT_LEFT_FOOT);
+    m_joints[nite::JOINT_RIGHT_FOOT] =        getJointCoords(nite::JOINT_RIGHT_FOOT);
+
+    makeBones();
 }
 
 void Skeleton::makeBones()
 {
-    bones.emplace_back(std::make_pair(joints[nite::JOINT_LEFT_HAND],        joints[nite::JOINT_LEFT_ELBOW]));
-    bones.emplace_back(std::make_pair(joints[nite::JOINT_LEFT_SHOULDER],    joints[nite::JOINT_LEFT_ELBOW]));
-    bones.emplace_back(std::make_pair(joints[nite::JOINT_LEFT_SHOULDER],    joints[nite::JOINT_RIGHT_SHOULDER]));
-    bones.emplace_back(std::make_pair(joints[nite::JOINT_RIGHT_HAND],       joints[nite::JOINT_RIGHT_ELBOW]));
-    bones.emplace_back(std::make_pair(joints[nite::JOINT_RIGHT_SHOULDER],   joints[nite::JOINT_RIGHT_ELBOW]));
-  
-    bones.emplace_back(std::make_pair(joints[nite::JOINT_LEFT_FOOT],        joints[nite::JOINT_LEFT_KNEE]));
-    bones.emplace_back(std::make_pair(joints[nite::JOINT_LEFT_HIP],         joints[nite::JOINT_LEFT_KNEE]));
-    bones.emplace_back(std::make_pair(joints[nite::JOINT_LEFT_HIP],         joints[nite::JOINT_RIGHT_HIP]));
-    bones.emplace_back(std::make_pair(joints[nite::JOINT_RIGHT_FOOT],       joints[nite::JOINT_RIGHT_KNEE]));
-    bones.emplace_back(std::make_pair(joints[nite::JOINT_RIGHT_HIP],        joints[nite::JOINT_RIGHT_KNEE]));
-    
-    bones.emplace_back(std::make_pair(joints[nite::JOINT_NECK],             joints[nite::JOINT_HEAD]));
+    m_bones.emplace_back(Vertex(m_joints[nite::JOINT_LEFT_HAND]));        
+    m_bones.emplace_back(Vertex(m_joints[nite::JOINT_LEFT_ELBOW]));
+    m_bones.emplace_back(Vertex(m_joints[nite::JOINT_LEFT_SHOULDER])); 
+    m_bones.emplace_back(Vertex(m_joints[nite::JOINT_LEFT_ELBOW]));
+    m_bones.emplace_back(Vertex(m_joints[nite::JOINT_LEFT_SHOULDER]));   
+    m_bones.emplace_back(Vertex(m_joints[nite::JOINT_RIGHT_SHOULDER]));
+    m_bones.emplace_back(Vertex(m_joints[nite::JOINT_RIGHT_HAND]));       
+    m_bones.emplace_back(Vertex(m_joints[nite::JOINT_RIGHT_ELBOW]));
+    m_bones.emplace_back(Vertex(m_joints[nite::JOINT_RIGHT_SHOULDER]));   
+    m_bones.emplace_back(Vertex(m_joints[nite::JOINT_RIGHT_ELBOW]));
 
-    bones.emplace_back(std::make_pair(joints[nite::JOINT_RIGHT_HIP],        joints[nite::JOINT_RIGHT_SHOULDER]));
-    bones.emplace_back(std::make_pair(joints[nite::JOINT_LEFT_HIP],         joints[nite::JOINT_LEFT_SHOULDER]));
+    m_bones.emplace_back(Vertex(m_joints[nite::JOINT_LEFT_FOOT]));        
+    m_bones.emplace_back(Vertex(m_joints[nite::JOINT_LEFT_KNEE]));
+    m_bones.emplace_back(Vertex(m_joints[nite::JOINT_LEFT_HIP]));         
+    m_bones.emplace_back(Vertex(m_joints[nite::JOINT_LEFT_KNEE]));
+    m_bones.emplace_back(Vertex(m_joints[nite::JOINT_LEFT_HIP]));         
+    m_bones.emplace_back(Vertex(m_joints[nite::JOINT_RIGHT_HIP]));
+    m_bones.emplace_back(Vertex(m_joints[nite::JOINT_RIGHT_FOOT]));       
+    m_bones.emplace_back(Vertex(m_joints[nite::JOINT_RIGHT_KNEE]));
+    m_bones.emplace_back(Vertex(m_joints[nite::JOINT_RIGHT_HIP]));        
+    m_bones.emplace_back(Vertex(m_joints[nite::JOINT_RIGHT_KNEE]));
+
+    m_bones.emplace_back(Vertex(m_joints[nite::JOINT_NECK]));             
+    m_bones.emplace_back(Vertex(m_joints[nite::JOINT_HEAD]));
+
+    m_bones.emplace_back(Vertex(m_joints[nite::JOINT_RIGHT_HIP]));        
+    m_bones.emplace_back(Vertex(m_joints[nite::JOINT_RIGHT_SHOULDER]));
+    m_bones.emplace_back(Vertex(m_joints[nite::JOINT_LEFT_HIP]));         
+    m_bones.emplace_back(Vertex(m_joints[nite::JOINT_LEFT_SHOULDER]));
 }
 
-glm::vec2 Skeleton::getJointCoords(nite::JointType joint)
+// void Skeleton::makeBones()
+// {
+//     m_bones.emplace_back(std::make_pair(m_joints[nite::JOINT_LEFT_HAND],        m_joints[nite::JOINT_LEFT_ELBOW]));
+//     m_bones.emplace_back(std::make_pair(m_joints[nite::JOINT_LEFT_SHOULDER],    m_joints[nite::JOINT_LEFT_ELBOW]));
+//     m_bones.emplace_back(std::make_pair(m_joints[nite::JOINT_LEFT_SHOULDER],    m_joints[nite::JOINT_RIGHT_SHOULDER]));
+//     m_bones.emplace_back(std::make_pair(m_joints[nite::JOINT_RIGHT_HAND],       m_joints[nite::JOINT_RIGHT_ELBOW]));
+//     m_bones.emplace_back(std::make_pair(m_joints[nite::JOINT_RIGHT_SHOULDER],   m_joints[nite::JOINT_RIGHT_ELBOW]));
+  
+//     m_bones.emplace_back(std::make_pair(m_joints[nite::JOINT_LEFT_FOOT],        m_joints[nite::JOINT_LEFT_KNEE]));
+//     m_bones.emplace_back(std::make_pair(m_joints[nite::JOINT_LEFT_HIP],         m_joints[nite::JOINT_LEFT_KNEE]));
+//     m_bones.emplace_back(std::make_pair(m_joints[nite::JOINT_LEFT_HIP],         m_joints[nite::JOINT_RIGHT_HIP]));
+//     m_bones.emplace_back(std::make_pair(m_joints[nite::JOINT_RIGHT_FOOT],       m_joints[nite::JOINT_RIGHT_KNEE]));
+//     m_bones.emplace_back(std::make_pair(m_joints[nite::JOINT_RIGHT_HIP],        m_joints[nite::JOINT_RIGHT_KNEE]));
+    
+//     m_bones.emplace_back(std::make_pair(m_joints[nite::JOINT_NECK],             m_joints[nite::JOINT_HEAD]));
+
+//     m_bones.emplace_back(std::make_pair(m_joints[nite::JOINT_RIGHT_HIP],        m_joints[nite::JOINT_RIGHT_SHOULDER]));
+//     m_bones.emplace_back(std::make_pair(m_joints[nite::JOINT_LEFT_HIP],         m_joints[nite::JOINT_LEFT_SHOULDER]));
+// }
+
+glm::vec3 Skeleton::getJointCoords(nite::JointType joint)
 {
 	float x, y;
+
 	m_userTracker.convertJointCoordinatesToDepth(
 		m_ID.getJoint(joint).getPosition().x,
 		m_ID.getJoint(joint).getPosition().y,
 		m_ID.getJoint(joint).getPosition().z,
-		&x,
-		&y);
+		&x, &y);
 
-	return glm::vec2(x, y);
+	return glm::vec3(x, y, m_ID.getJoint(joint).getPosition().z);
 }
+
+// drawCircle(posX, posY, (1 - (user_skel.getJoint(nite::JOINT_HEAD).getPosition().z / 5000)) * 35);
 
 // void Skeleton::detectSkeleton()
 // {

@@ -18,7 +18,8 @@ void Renderer::buildMesh(Mesh &mesh)
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
 
 	// "Send" the data to the GPU
-	glBufferData(GL_ARRAY_BUFFER, mesh.getDrawCount() * sizeof(Vertex), &(mesh.getVertexList()[0]), mesh.getUsage());
+	glBufferData(GL_ARRAY_BUFFER, mesh.getDrawCount() * sizeof(mesh.getVertexList()[0]),
+				 &(mesh.getVertexList()[0]), mesh.getUsage());
 
 	// Set VAO and VBO
 	mesh.setVAO(VAO);
@@ -42,7 +43,7 @@ void Renderer::buildMesh(Mesh &mesh)
 	glBindVertexArray(0); // ===	Like glEnd() === //
 }
 
-void Renderer::draw(Object& obj, const Mesh& mesh, Texture texture, GLenum mode)
+void Renderer::draw(Object &obj, const Mesh &mesh, Texture texture, GLenum mode)
 {
 	// Make the shader active and set the model matrix
 	mesh.getShader().use().setMatrix4("model", obj.getModelMatrix());
@@ -51,22 +52,33 @@ void Renderer::draw(Object& obj, const Mesh& mesh, Texture texture, GLenum mode)
 	mesh.getShader().setInteger("uTexture", 0);
 
 	// Bind the texture
-  	texture.bind();
+	texture.bind();
 
 	// Bind the VAO of this mesh
 	glBindVertexArray(mesh.getVAO());
-		glDrawArrays(mode, 0, mesh.getDrawCount());
+	glDrawArrays(mode, 0, mesh.getDrawCount());
 	glBindVertexArray(0);
 }
 
-void Renderer::draw(Object& obj, const Mesh& mesh, GLenum mode)
+void Renderer::draw(Object &obj, const Mesh &mesh, GLenum mode)
 {
 	// Make the shader active
 	mesh.getShader().use().setMatrix4("model", obj.getModelMatrix());
 
 	// Bind the VAO of this mesh
 	glBindVertexArray(mesh.getVAO());
-		glDrawArrays(mode, 0, mesh.getDrawCount());
+	glDrawArrays(mode, 0, mesh.getDrawCount());
+	glBindVertexArray(0);
+}
+
+void Renderer::draw(const Mesh &mesh, GLenum mode)
+{
+	// Make the shader active
+	mesh.getShader().use();
+
+	// Bind the VAO of this mesh
+	glBindVertexArray(mesh.getVAO());
+	glDrawArrays(mode, 0, mesh.getDrawCount());
 	glBindVertexArray(0);
 }
 

@@ -25,24 +25,25 @@ private:
 	OniRGB888Pixel* rgbData;
 	bool _toogleSkel;
 
+	void enableImageRegistration();
+
 public:
 	nite::UserTracker uTracker;
 	Kinect();
 	~Kinect();
 	void toogleSkeleton();
 
-	// inline OniRGB888Pixel* getRGBTex() { return rgbData; }
 	inline Texture getRGBTex()			{ return rgbTex;		}
 	inline OniRGB888Pixel* getRGBData()	{ return rgbData;		}
 	inline bool getToogleSkel()			{ return _toogleSkel;	}
 
 	void initOpenNI();
 	void initNITE();
+	void close();
+	
 	void updateRGBCam();
 	std::vector<Skeleton> trackSkeletons();
 	Vertex jointCoords(nite::Skeleton user_skel, nite::JointType joint);
-	void enableImageRegistration();
-	void close();
 };
 
 #endif	//	KINECT_H_

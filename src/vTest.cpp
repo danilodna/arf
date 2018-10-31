@@ -18,9 +18,9 @@ int main(int argc, char **argv)
 {
     Vertex texturedVertices[] =
         {
-            Vertex(glm::vec4(-0.5f, 0.5f, 0.0f, 1.0f), glm::vec4(0.0f, 1.0f, 0.0f, 0.0f)), //  3
-            Vertex(glm::vec4(0.5f, 0.5f, 0.0f, 1.0f), glm::vec4(1.0f, 1.0f, 0.0f, 0.0f)),  //  2
-            Vertex(glm::vec4(0.5f, -0.5f, 0.0f, 1.0f), glm::vec4(1.0f, 0.0f, 0.0f, 0.0f)), //  1
+            Vertex(glm::vec4(-0.5f,  0.5f, 0.0f, 1.0f),  glm::vec4(0.0f, 1.0f, 0.0f, 0.0f)), //  3
+            Vertex(glm::vec4( 0.5f,  0.5f, 0.0f, 1.0f),   glm::vec4(1.0f, 1.0f, 0.0f, 0.0f)),  //  2
+            Vertex(glm::vec4( 0.5f, -0.5f, 0.0f, 1.0f),  glm::vec4(1.0f, 0.0f, 0.0f, 0.0f)), //  1
             Vertex(glm::vec4(-0.5f, -0.5f, 0.0f, 1.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.0f)) //  0
         };
 
@@ -29,6 +29,7 @@ int main(int argc, char **argv)
     // Load Shaders
     // Shader colored = ResourceManager::loadShader("shaders/colored.vs", "shaders/colored.fs", nullptr, "colored", 640, 480);
     Shader textured = ResourceManager::loadShader("shaders/textured.vs", "shaders/textured.fs", nullptr, "textured", 640, 480);
+    Shader skelShader = ResourceManager::loadShader("shaders/skeleton.vs", "shaders/skeleton.fs", nullptr, "skelShader", 640, 480);
 
     // Create Meshes with the data
     Mesh texturedMesh(texturedVertices, textured, 4, 2, 4, GL_STATIC_DRAW);
@@ -42,7 +43,6 @@ int main(int argc, char **argv)
     Kinect kinect;
     kinect.initOpenNI();
     kinect.initNITE();
-    kinect.enableImageRegistration();
 
     Object rgbCam, emoteFace;
     rgbCam.resize(window.getWidth(), window.getHeight());
@@ -54,6 +54,8 @@ int main(int argc, char **argv)
     GLfloat lastFrame = 0.0f;
 
     glm::vec3 clear_color;
+
+    glLineWidth(5);
 
     while (window.isOpen())
     {
@@ -89,10 +91,21 @@ int main(int argc, char **argv)
 
         if (!skels.empty())
         {
-            printVec(skels[0].getJoint(nite::JOINT_HEAD));
-            emoteFace.move(skels[0].getJoint(nite::JOINT_HEAD));
+            glm::vec3 skel_pos = skels[0].getJoint(nite::JOINT_HEAD);
+            
+            emoteFace.move(skel_pos.x, skel_pos.y);
+            emoteFace.resize((5000/skel_pos.z) * 26, (5000/skel_pos.z) * 28);
+            
+            std::cout << skels[0].getBones().size() << std::endl;
+
+            Mesh nononon(skels[0].getBones(), skelShader, 2, 4, GL_DYNAMIC_DRAW);
+            Renderer::buildMesh(nononon);
+
+            Renderer::draw(nononon, GL_LINES);
             Renderer::draw(emoteFace, texturedMesh, smiley, GL_TRIANGLE_FAN);
         }
+
+        
 
         ImGui::Render();
         ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());

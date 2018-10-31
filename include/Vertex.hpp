@@ -17,9 +17,9 @@ private:
 
 public:
   Vertex() = default;
-  Vertex(const glm::vec2 &pos) : m_position(pos, 0.0f, 1.0f){};
-  Vertex(const glm::vec3 &pos) : m_position(pos, 1.0f){};
-  Vertex(const glm::vec4 &pos) : m_position(pos){};
+  Vertex(const glm::vec2 &pos) : m_position(pos, 0.0f, 1.0f), m_color(0.0f, 0.0f, 0.0f, 1.0f){};
+  Vertex(const glm::vec3 &pos) : m_position(pos, 1.0f),       m_color(0.0f, 0.0f, 0.0f, 1.0f){};
+  Vertex(const glm::vec4 &pos) : m_position(pos),             m_color(0.0f, 0.0f, 0.0f, 1.0f){};
   Vertex(const glm::vec4 &pos, const glm::vec4 &color)
       : m_position(pos), m_color(color){};
   ~Vertex() = default;
@@ -29,6 +29,8 @@ public:
     std::cout << "Position: (" << m_position.x << ", " << m_position.y << ", "
               << m_position.z << ", " << m_position.w << ") " << std::endl;
   }
+
+  inline glm::vec4 getPos() const { return m_position; }
 };
 
 // ==============

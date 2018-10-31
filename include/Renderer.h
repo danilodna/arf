@@ -18,6 +18,8 @@ class Renderer
 
   public:
 	static void buildMesh(Mesh& mesh);
+	
+	static void draw(const Mesh& mesh, GLenum mode = GL_TRIANGLE_FAN);
 	static void draw(Object& obj, const Mesh& mesh, GLenum mode = GL_TRIANGLE_FAN);
 	static void draw(Object& obj, const Mesh& mesh, Texture texture, GLenum mode = GL_TRIANGLE_FAN);
 };

@@ -16,16 +16,18 @@ private:
 	nite::Skeleton& m_ID;
 	nite::UserTracker& m_userTracker;
 
-	std::map    <unsigned int, glm::vec2 > joints;
-	std::vector <std::pair<glm::vec2, glm::vec2> > bones;
+	std::map    <unsigned int, glm::vec3 > m_joints;
+	std::vector <Vertex> m_bones;
 
 public:
 	Skeleton (nite::Skeleton& ID, nite::UserTracker& userTracker);
 	~Skeleton () = default;
 
 	void makeBones();
-	glm::vec2 getJointCoords(nite::JointType joint);
-	glm::vec2 getJoint(unsigned int jointType) { return joints[jointType]; }
+	glm::vec3 getJointCoords(nite::JointType joint);
+	
+	inline glm::vec3 getJoint(unsigned int jointType) { return m_joints[jointType]; }
+	inline std::vector<Vertex> getBones() { return m_bones; }
 };
 
 #endif //	SKELETON_H_

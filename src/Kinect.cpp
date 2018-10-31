@@ -56,6 +56,8 @@ void Kinect::initNITE()
 	niStatus = uTracker.create();
 	if (!HandleStatus(niStatus))
 		exit(EXIT_FAILURE);
+
+	enableImageRegistration();
 }
 
 void Kinect::enableImageRegistration()
